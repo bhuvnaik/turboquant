@@ -27,3 +27,9 @@ class TurboQuantProd:
         x_qjl = self.qjl.dequantize(z, norm)
 
         return x_mse + x_qjl
+    def quantize_mse_only(self, x):
+        idx = self.mse.quantize(x)
+        return idx
+
+    def dequantize_mse_only(self, idx):
+        return self.mse.dequantize(idx)

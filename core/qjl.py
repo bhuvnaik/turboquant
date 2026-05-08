@@ -5,19 +5,14 @@ class QJL:
     def __init__(self, d, device="cpu", seed=None):
         if seed is not None:
             torch.manual_seed(seed)
-
         self.d = d
-        self.S = torch.randn(d, d, device=device)
+        S = torch.randn(d, d, device=device)
+        self.S = S / S.norm(dim=1, keepdim=True)  # ← normalize rows to unit norm
 
     def quantize(self, r):
-        # r: (batch, d)
         return torch.sign(r @ self.S.T)
 
     def dequantize(self, z, norm):
-        # z: (batch, d)
-        # norm: (batch,)
-
         scale = np.sqrt(np.pi / 2) / self.d
-        recon = z @ self.S  # (batch, d)
-
+        recon = z @ self.S
         return scale * norm.unsqueeze(1) * recon
