@@ -1,6 +1,6 @@
 import argparse
 import os
-import numpy as np   # ← add this
+import numpy as np   
 import torch
 
 from core.prod_quantizer import TurboQuantProd
